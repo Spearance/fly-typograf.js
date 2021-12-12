@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru-RU">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<title>Типограф</title>
+		<meta name="copyright" content="2021, © Evgeniy Lepeshkin">
+		<style>
+			html, body {
+				background-color: #F5F5F5;
+				font-family: 'PT Sans', sans-serif;
+				font-size: 110%;
+			}
+
+			textarea {
+				border: none;
+				box-shadow: 0 0 50px 0 rgba(70, 70, 70, 0.5);
+				margin: 50px, 0;
+				min-width: 300px;
+				width: 100%;
+				max-width: 800px;
+				height: 300px;
+				resize: none;
+				outline: none;
+				font-size: 100%;
+				padding: 20px;
+			}
+
+			.hlg{ background-color: #B8FBBA }
+			.hlb{ background-color: #B7ECF1 }
+		</style>
+
+	</head>
+	<body>
+		<h1>FlyTypograf.js</h1>
+		<small>версия: 1.0</small>
+
+		<p>"Вы все еще кое-как верстаете в "Word-е"? - Тогда мы идем к вам!"</p>
+
+		<textarea placeholder="начните писать что-нибудь..." autocomplete="off" id="typograf" autofocus=""></textarea>
+
+		<h3>Подсветка изменений</h3>
+		<div id="highlighted">Введите текст в &lt;textarea&gt;</div>
+
+		<h3>Умеет:</h3>
+			<ul>
+				<li>Верстать кавычки, тире, спецсимволы: …, ©, ®, ™, ₽</li>
+				<li>Ставить минус между числами и &times; между размерными единицами</li>
+				<li>Привязывать неразрывным пробелом союзы и предлоги к последующим словам, а частицы к предыдущим</li>
+			</ul>
+
+		<p>Проект на <a href="https://github.com/Spearance/FlyTypograf.js">GitHub</a></p>
+
+		<script type="module" src="./../FlyTypograf.js"></script>
+		<script type="module" src="./example.js"></script>
+	</body>
+</html>
