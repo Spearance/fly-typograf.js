@@ -7,11 +7,12 @@
 		<style>
 			html, body {
 				background-color: #F5F5F5;
-				font-family: 'PT Sans', sans-serif;
+				font-family: 'Times New Roman', serif;
 				font-size: 110%;
 			}
 
 			textarea {
+				font-family: 'Times New Roman', serif;
 				border: none;
 				box-shadow: 0 0 50px 0 rgba(70, 70, 70, 0.5);
 				margin: 50px, 0;
@@ -34,23 +35,23 @@
 		<h1>FlyTypograf.js</h1>
 		<small>версия: 1.0</small>
 
-		<p>"Вы все еще кое-как верстаете в "Word-е"? - Тогда мы идем к вам!"</p>
+		<p>Наберите текст: "Вы все еще кое-как верстаете в "Word-е"? - Тогда мы идем к вам!"</p>
 
-		<textarea placeholder="начните писать что-нибудь..." autocomplete="off" id="typograf" autofocus=""></textarea>
+		<textarea placeholder="начните писать..." autocomplete="off" id="typograf" autofocus=""></textarea>
 
-		<h3>Подсветка изменений</h3>
-		<div id="highlighted">Введите текст в &lt;textarea&gt;</div>
+		<h3>С подсветкой изменений</h3>
+		<p id="highLight">начните писать...</p>
 
 		<h3>Умеет:</h3>
 			<ul>
 				<li>Верстать кавычки, тире, спецсимволы: …, ©, ®, ™, ₽</li>
 				<li>Ставить минус между числами и &times; между размерными единицами</li>
 				<li>Привязывать неразрывным пробелом союзы и предлоги к последующим словам, а частицы к предыдущим</li>
+				<li>Разрешает писать HTML разметку и комментарии к ней</li>
 			</ul>
 
-		<p>Проект на <a href="https://github.com/Spearance/FlyTypograf.js">GitHub</a></p>
+		<p>Ссылка на <a href="https://github.com/Spearance/FlyTypograf.js">GitHub</a></p>
 
-		<script type="module" src="./../FlyTypograf.js"></script>
-		<script type="module" src="./example.js"></script>
+		<script src="./example-min.js"></script>
 	</body>
 </html>
