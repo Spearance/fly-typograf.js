@@ -41,6 +41,11 @@ export class FlyTypograf {
 
 	#rules = [
 		{
+			// remove multiply space
+			pattern: /[\u00A0\u202F]+/g,
+			replace: ` `
+		},
+		{
 			// Minus sign
 			pattern: / -(\d)/g,
 			replace: ` −$1`
@@ -60,11 +65,8 @@ export class FlyTypograf {
 		},
 		{
 			// Multiple spaces
-			pattern: /\u00a0{2,}|\u00a0 | \u00a0/g,
-			replace: (str) => {
-				this.#caretPosition -= str.length - 1
-				return `\u00a0`
-			}
+			pattern: /\u00A0 | \u00A0/g,
+			replace: `  `
 		},
 		{
 			// Numerical interval
@@ -195,18 +197,18 @@ export class FlyTypograf {
 		},
 		{
 			// Prepositions
-			pattern: /((?:^|\n|\t|[\u00a0 ]|>)[a-zа-яё]{1,2}) /ig,
-			replace: `$1\u00a0`
+			pattern: /((?:[ \u00A0]|>|^|\t)[a-zа-яё]{1,2}) /igm,
+			replace: `$1\u00A0`
 		},
 		{
 			// Particles with dash and non-breaking space
-			pattern: /\-(то|ка)\u00a0/gi,
+			pattern: /-(то|ка)\u00A0/gi,
 			replace: `-$1 `
 		},
 		{
 			// Particles
-			pattern: /(?:\s|\t|[\u00a0 ])(же?|л[иь]|бы?|ка)([.,!?:;])?\u00a0/ig,
-			replace: `\u00a0$1$2 `
+			pattern: /(?:\s|\t|[\u00A0 ])(же?|л[иь]|бы?|ка)([.,!?:;])?\u00A0/ig,
+			replace: `\u00A0$1$2 `
 		}
 	];
 
