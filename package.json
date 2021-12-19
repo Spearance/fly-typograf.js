@@ -1,0 +1,20 @@
+{
+  "name": "FlyTypograf.js",
+  "version": "1.0.0",
+  "description": "Афтотипографика текста в полях <input> и <textarea> на лету",
+  "main": "FlyTypograf.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Spearance/FlyTypograf.js.git"
+  },
+  "author": {
+    "name": "Evgeniy Lepeshkin",
+    "email": "mail@spearance.ru"
+    "url": "https://spearance.ru"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Spearance/FlyTypograf.js/issues"
+  },
+  "homepage": "https://github.com/Spearance/FlyTypograf.js#readme"
+}
