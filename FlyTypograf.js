@@ -60,7 +60,7 @@ export class FlyTypograf {
 		},
 		{
 			// Multiple spaces
-			pattern: /\u00a0{2,}|\u00a0 | \u00a0/g, //здесь неправильно, надо давать вводить два пробела после привязанных союзов
+			pattern: /\u00a0{2,}|\u00a0 | \u00a0/g,
 			replace: (str) => {
 				this.#caretPosition -= str.length - 1
 				return `\u00a0`
