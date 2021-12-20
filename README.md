@@ -1,6 +1,6 @@
 # Типограф #
 
-Афтотипографика текста в полях `<input>`, `<textarea>` и `contenteditable="true"` на лету.
+Автотипографика текста в полях `<input>`, `<textarea>` и `contenteditable="true"` на лету.
 
 ## Что делает Типограф? ##
 
