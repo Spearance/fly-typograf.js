@@ -1,6 +1,6 @@
 {
   "name": "FlyTypograf.js",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Афтотипографика текста в полях <input> и <textarea> на лету",
   "main": "FlyTypograf.js",
   "repository": {
@@ -12,6 +12,14 @@
     "email": "mail@spearance.ru",
     "url": "https://spearance.ru"
   },
+  "keywords": [
+    "correct",
+    "text",
+    "typograf",
+    "autotypograf",
+    "typograph",
+    "page-proofs"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Spearance/FlyTypograf.js/issues"

@@ -9,8 +9,8 @@
 	Released under the MIT license.
 	http://www.opensource.org/licenses/mit-license.php
 
-	Version: v 1.0
-	Date: Aug 26, 2021
+	Version: v 1.1.0
+	Date: Dec 24, 2021
  */
 
 export class FlyTypograf {
@@ -39,34 +39,68 @@ export class FlyTypograf {
 		"7/8": `⅞`
 	}
 
-	#rules = [
+	#prepare = [
 		{
-			// remove multiply space
+			// Remove non-breaking space with simple space
+			pattern: /\u00A0 | \u00A0/g,
+			replace: `  `
+		},
+		{
+			// Remove thin non-breaking space with simple space
+			pattern: /\u202F | \u202F/g,
+			replace: ` `
+		},
+		{
+			// Remove multiply non-breaking spaces
 			pattern: /[\u00A0\u202F]+/g,
 			replace: ` `
 		},
 		{
-			// Minus sign
-			pattern: / -(\d)/g,
-			replace: ` −$1`
-		},
+			// Remove dashes and minuses
+			pattern: /[−–]/g,
+			replace: `-`
+		}
+	]
+
+	#process = [
 		{
-			// Dash sign
-			pattern: /(^|\n|\s|>)\-(\s)/g,
-			replace: `$1—$2`
+			// Minus sign
+			pattern: /(?<= |^)[—-](\d)/g,
+			replace: `−$1`
 		},
 		{
 			// Double hyphen
-			pattern: /(?<![-!])-{2} /g,
+			pattern: /(?<![!])--(?!>)/g,
 			replace: () => {
 				this.#caretPosition--
-				return `— `
+				return `-`
 			}
 		},
 		{
-			// Multiple spaces
-			pattern: /\u00A0 | \u00A0/g,
-			replace: `  `
+			// Plus/Minus +/-
+			pattern: /\+\/\-/g,
+			replace: () => {
+				this.#caretPosition -= 2
+				return `±`
+			}
+		},
+		{
+			// Dash sign
+			pattern: /(?<= |^|>|[^-!а-яёa-z])-(?= |$|[^-])/gmi,
+			replace: `—`
+		},
+		{
+			// Non-breaking space with dash sign
+			pattern: /(?<!^|[":;.!?…, ]) —(?!-)/gm,
+			replace: `\u00A0—`
+		},
+		{
+			// Dash sign with non-breaking space
+			pattern: /([ ]+)—([ ]*?)([a-zа-яё0-9])/gmi,
+			replace: (str, $1, $2, $3) => {
+				this.#caretPosition -= ($1.length ? $1.length - 1 : 0) + ($2.length ? $2.length - 1 : 0)
+				return ` —\u00A0${$3}`
+			}
 		},
 		{
 			// Numerical interval
@@ -130,14 +164,6 @@ export class FlyTypograf {
 			replace: `$1×$2`
 		},
 		{
-			// Plus/Minus +/-
-			pattern: /\+\/\-/g,
-			replace: () => {
-				this.#caretPosition -= 2
-				return `±`
-			}
-		},
-		{
 			// Decimals like 1/2
 			pattern: /\b([123457]\/[234568])\b/g,
 			replace: (str, $1) => {
@@ -157,12 +183,12 @@ export class FlyTypograf {
 		},
 		{
 			// Open quote
-			pattern: /["»]([a-z0-9а-яё…])/ig,
+			pattern: /["»](\S)/ig,
 			replace: `${this.#leftQuote}$1`
 		},
 		{
 			// Close quote
-			pattern: /([a-z0-9а-яё…?!])["«]/ig,
+			pattern: /(\S)["«]/ig,
 			replace: `$1${this.#rightQuote}`
 		},
 		{
@@ -212,9 +238,14 @@ export class FlyTypograf {
 		}
 	];
 
-	constructor (textElement) {
+	constructor (textElement, preference) {
 		this._element = textElement
 		this._isContentEditable = this._element.contentEditable === true
+
+		if (preference) {
+			this.#leftQuote = preference.leftQuote || `«`
+			this.#rightQuote = preference.rightQuote || `«`
+		}
 	}
 
 	get result() {
@@ -224,32 +255,24 @@ export class FlyTypograf {
 	process () {
 		this.#result = this._element.value
 
-		this._getCaretPosition()
+		this.#applyRules(this.#prepare)
 
-		this.#rules.forEach((regex) => {
-			this.#result = this.#result.replace(regex.pattern, regex.replace)
-		})
+		this.#getCaretPosition()
+
+		this.#applyRules(this.#process)
 
 		this._element.value = this.#result
 
-		this._setCaretPosition(this.#caretPosition)
+		this.#setCaretPosition(this.#caretPosition)
 	}
 
-	_getSelectionText () {
-		if (window.getSelection) {
-			return window.getSelection()
-		}
-
-		if (document.getSelection) {
-			return document.getSelection()
-		}
-
-		if (document.selection) {
-			return document.selection.createRange().text
-		}
+	#applyRules (array) {
+		array.forEach((regex) => {
+			this.#result = this.#result.replace(regex.pattern, regex.replace)
+		})
 	}
 
-	_getCaretPosition () {
+	#getCaretPosition () {
 		if (this._isContentEditable) {
 			this._element.focus()
 			let _range = document.getSelection().getRangeAt(0)
@@ -262,7 +285,7 @@ export class FlyTypograf {
 		this.#caretPosition = this._element.selectionStart
 	}
 
-	_setCaretPosition (pos) {
+	#setCaretPosition (pos) {
 		if (this._isContentEditable) {
 			this._element.focus()
 			document.getSelection().collapse(this._element, pos)
