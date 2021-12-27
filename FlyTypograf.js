@@ -9,8 +9,8 @@
 	Released under the MIT license.
 	http://www.opensource.org/licenses/mit-license.php
 
-	Version: v 1.1.0
-	Date: Dec 24, 2021
+	Version: v 1.1.1
+	Date: Dec 26, 2021
  */
 
 export class FlyTypograf {
@@ -27,7 +27,10 @@ export class FlyTypograf {
 		"1/4": `¼`,
 		"1/5": `⅕`,
 		"1/6": `⅙`,
+		"1/7": `⅐`,
 		"1/8": `⅛`,
+		"1/9": `⅑`,
+		"1/10": `⅒`,
 		"2/3": `⅔`,
 		"2/5": `⅖`,
 		"3/4": `¾`,
@@ -57,7 +60,7 @@ export class FlyTypograf {
 		},
 		{
 			// Remove dashes and minuses
-			pattern: /[−–]/g,
+			pattern: /[—–−]/g,
 			replace: `-`
 		}
 	]
@@ -65,7 +68,7 @@ export class FlyTypograf {
 	#process = [
 		{
 			// Minus sign
-			pattern: /(?<= |^)[—-](\d)/g,
+			pattern: /(?<= |^|\d)[—-](\d)/g,
 			replace: `−$1`
 		},
 		{
@@ -86,7 +89,7 @@ export class FlyTypograf {
 		},
 		{
 			// Dash sign
-			pattern: /(?<= |^|>|[^-!а-яёa-z])-(?= |$|[^-])/gmi,
+			pattern: /(?<= |^|>|[^-!а-яёa-z0-9])-(?= |$|[^-])/gmi,
 			replace: `—`
 		},
 		{
@@ -104,10 +107,10 @@ export class FlyTypograf {
 		},
 		{
 			// Numerical interval
-			pattern: /(\d)\s?[-—]\s?(\d)/g,
+			pattern: new RegExp(`(\\d|[${Object.values(this.#decimals).join('')}])\\s?[-—]\\s?(\\d|[${Object.values(this.#decimals).join('')}])`, `g`),
 			replace: (str, $1, $2) => {
-				this.#caretPosition -= str.length - `${$1}–${$2}`.length
-				return `${$1}–${$2}`
+				this.#caretPosition -= str.length - `${$1}−${$2}`.length
+				return `${$1}−${$2}`
 			}
 		},
 		{
@@ -165,7 +168,7 @@ export class FlyTypograf {
 		},
 		{
 			// Decimals like 1/2
-			pattern: /\b([123457]\/[234568])\b/g,
+			pattern: /\b([123457]\/(?:[2-9]|10))\b/g,
 			replace: (str, $1) => {
 				if (this.#decimals[`${$1}`]) {
 					this.#caretPosition -= 2
