@@ -1,3 +1,13 @@
+# Файлы и папки операционной системы
 .DS_Store
-config.codekit3
+Thumbs.db
+
+# Файлы редактора
+.idea
+*.sublime*
+.vscode
+
+# Вспомогательные файлы
+*.log*
+node_modules/
 /test/

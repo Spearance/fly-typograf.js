@@ -9,7 +9,7 @@
 	Released under the MIT license.
 	http://www.opensource.org/licenses/mit-license.php
 
-	Version: v 1.1.1
+	Version: v 1.2.1
 	Date: Dec 26, 2021
  */
 
@@ -21,25 +21,56 @@ export class FlyTypograf {
 	#leftQuote = `«`
 	#rightQuote = `»`
 
-	#decimals = {
-		"1/2": `½`,
-		"1/3": `⅓`,
-		"1/4": `¼`,
-		"1/5": `⅕`,
-		"1/6": `⅙`,
-		"1/7": `⅐`,
-		"1/8": `⅛`,
-		"1/9": `⅑`,
-		"1/10": `⅒`,
-		"2/3": `⅔`,
-		"2/5": `⅖`,
-		"3/4": `¾`,
-		"3/5": `⅗`,
-		"3/8": `⅜`,
-		"4/5": `⅘`,
-		"5/6": `⅚`,
-		"5/8": `⅝`,
-		"7/8": `⅞`
+	#decimal = {
+	  literals: {
+	    "1/2": `½`,
+	    "1/3": `⅓`,
+	    "1/4": `¼`,
+	    "1/5": `⅕`,
+	    "1/6": `⅙`,
+	    "1/7": `⅐`,
+	    "1/8": `⅛`,
+	    "1/9": `⅑`,
+	    "1/10": `⅒`,
+	    "2/3": `⅔`,
+	    "2/5": `⅖`,
+	    "3/4": `¾`,
+	    "3/5": `⅗`,
+	    "3/8": `⅜`,
+	    "4/5": `⅘`,
+	    "5/6": `⅚`,
+	    "5/8": `⅝`,
+	    "7/8": `⅞`
+	  },
+	  str: function () {
+	    return Object.values(this.literals).join(``)
+	  }
+	}
+
+	#upIndex = {
+		literals: {
+			"0": `⁰`,
+			"1": `¹`,
+			"2": `²`,
+			"3": `³`,
+			"4": `⁴`,
+			"5": `⁵`,
+			"6": `⁶`,
+			"7": `⁷`,
+			"8": `⁸`,
+			"9": `⁹`,
+			"—": `⁻`,	// mdash
+			"+": `⁺`,
+			"=": `⁼`,
+			"(": `⁽`,
+			")": `⁾`,
+			"o": `°`,	// en `o`
+			"о": `°`,	// ru `o`
+			"\"": `″`
+		},
+		str: function () {
+	    return Object.values(this.literals).join(``)
+	  }
 	}
 
 	#prepare = [
@@ -107,7 +138,7 @@ export class FlyTypograf {
 		},
 		{
 			// Numerical interval
-			pattern: new RegExp(`(\\d|[${Object.values(this.#decimals).join('')}])\\s?[-—]\\s?(\\d|[${Object.values(this.#decimals).join('')}])`, `g`),
+			pattern: new RegExp(`(\\d|[${this.#decimal.str()}])\\s?[-—]\\s?(\\d|[${this.#decimal.str()}])`, `g`),
 			replace: (str, $1, $2) => {
 				this.#caretPosition -= str.length - `${$1}−${$2}`.length
 				return `${$1}−${$2}`
@@ -162,26 +193,53 @@ export class FlyTypograf {
 			}
 		},
 		{
-			// Sizes
+			// Size
 			pattern: /(\d)[xх](\d)/ig,
 			replace: `$1×$2`
 		},
 		{
-			// Decimals like 1/2
+			// Decimal like 1/2
 			pattern: /\b([123457]\/(?:[2-9]|10))\b/g,
 			replace: (str, $1) => {
-				if (this.#decimals[`${$1}`]) {
+				if (this.#decimal.literals[`${$1}`]) {
 					this.#caretPosition -= 2
 				}
-				return this.#decimals[`${$1}`] ? this.#decimals[`${$1}`] : `${$1}`
+				return this.#decimal.literals[$1] ? this.#decimal.literals[$1] : $1
 			}
 		},
 		{
-			// Fix decimals with next number
-			pattern: new RegExp(`([${Object.values(this.#decimals).join('')}])(\\d)`, `g`),
+			// Fix decimal with next number
+			pattern: new RegExp(`([${this.#decimal.str()}])(\\d)`, `g`),
 			replace: (str, $1, $2) => {
 				this.#caretPosition += 2
-				return `${Object.entries(this.#decimals).find(i => i[1] === $1)[0]}${$2}`
+				return `${Object.entries(this.#decimal.literals).find(i => i[1] === $1)[0]}${$2}`
+			}
+		},
+		{
+			// Up index symbols
+			pattern: /(\S)\^([0-9—+-=\(\)]|[oо"])/gi,
+			replace: (str, $1, $2) => {
+				this.#caretPosition--
+				return `${$1}${this.#upIndex.literals[$2] ? this.#upIndex.literals[$2] : $2}`
+			}
+		},
+		{
+			// Move up number up index symbols
+			pattern: new RegExp(`([${this.#upIndex.str()}])(?![ .])([0-9+-=\(\)])`, `g`),
+			replace: (str, $1, $2) => {
+				return `${$1}${this.#upIndex.literals[$2]}`
+			}
+		},
+		{
+			// Convert up index то number after space
+			pattern: new RegExp(` ([${this.#upIndex.str()}])`, `g`),
+			replace: (str, $1) => {
+				console.log(this.#upIndex.str())
+				for (let key in this.#upIndex.literals) {
+					if (this.#upIndex.literals[key] === $1) {
+						return ` ${key}`
+					}
+				}
 			}
 		},
 		{
