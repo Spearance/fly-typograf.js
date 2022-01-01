@@ -99,8 +99,8 @@ export class FlyTypograf {
 	#process = [
 		{
 			// Minus sign
-			pattern: /(?<= |^|\d)[—-](\d)/g,
-			replace: `−$1`
+			pattern: /(?<= |^|\d)-(?=\d)/g,
+			replace: `−`
 		},
 		{
 			// Double hyphen
