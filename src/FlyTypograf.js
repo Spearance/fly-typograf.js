@@ -13,7 +13,7 @@
 	Date: Dec 26, 2021
  */
 
-export default class FlyTypograf {
+export class FlyTypograf {
 	#original = ``
 	#result = ``
 	#caretPosition = 0
@@ -112,10 +112,18 @@ export default class FlyTypograf {
 		},
 		{
 			// Plus/Minus +/-
-			pattern: /\+\/\-/g,
+			pattern: /\+\/-/g,
 			replace: () => {
 				this.#caretPosition -= 2
 				return `±`
+			}
+		},
+		{
+			// Division
+			pattern: /(?<=(?:\d|[a-z])\s*)-:-/gi,
+			replace: () => {
+				this.#caretPosition -= 2
+				return `÷`
 			}
 		},
 		{
