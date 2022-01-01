@@ -1,8 +1,8 @@
 {
-  "name": "FlyTypograf.js",
-  "version": "1.2.1",
+  "name": "fly-typograf.js",
+  "version": "1.2.2",
   "license": "MIT",
-  "description": "Афтотипографика текста в полях <input> и <textarea> на лету",
+  "description": "Correct punctuation, non-breaking spaces and special characters in <input> and <textarea> on fly",
   "main": "source/FlyTypograf.js",
   "author": {
     "name": "Evgeniy Lepeshkin",

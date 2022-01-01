@@ -9,7 +9,7 @@
 	Released under the MIT license.
 	http://www.opensource.org/licenses/mit-license.php
 
-	Version: v 1.2.1
+	Version: v 1.2.2
 	Date: Dec 26, 2021
  */
 
@@ -99,8 +99,8 @@ export class FlyTypograf {
 	#process = [
 		{
 			// Minus sign
-			pattern: /(?<= |^|\d)[—-](\d)/g,
-			replace: `−$1`
+			pattern: /(?<= |^|\d)-(?=\d)/g,
+			replace: `−`
 		},
 		{
 			// Double hyphen
@@ -112,10 +112,18 @@ export class FlyTypograf {
 		},
 		{
 			// Plus/Minus +/-
-			pattern: /\+\/\-/g,
+			pattern: /\+\/-/g,
 			replace: () => {
 				this.#caretPosition -= 2
 				return `±`
+			}
+		},
+		{
+			// Division
+			pattern: /(?<=(?:\d|[a-z])\s*)-:-/gi,
+			replace: () => {
+				this.#caretPosition -= 2
+				return `÷`
 			}
 		},
 		{

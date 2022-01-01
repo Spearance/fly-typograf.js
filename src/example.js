@@ -29,7 +29,7 @@ textarea.addEventListener(`keyup`, () => {
 				.replace(/\n{2,}/g, "</p><p>")
 				.replace(/\n/g, "<br />")
 				.replace(/\u00a0/g, `<span class="hlg">&nbsp\;</span>`)
-				.replace(/([…©®™₽×—–−„“«»″′’½⅓¼⅕⅙⅛⅔⅖¾⅗⅜⅘⅚⅝⅞±⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺⁼⁽⁾°]+)/gi, `<span class="hlb">$1</span>`)
+				.replace(/([…©®™₽×—–−„“«»″′’½⅓¼⅕⅙⅛⅔⅖¾⅗⅜⅘⅚⅝⅞±÷⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺⁼⁽⁾°]+)/gi, `<span class="hlb">$1</span>`)
 				.replaceAll('<*>', () => {
 					const str = tags[0]
 					tags.splice(0, 1)
