@@ -1,6 +1,6 @@
 {
   "name": "fly-typograf.js",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "license": "MIT",
   "description": "Correct punctuation, non-breaking spaces and special characters in <input> and <textarea> on fly",
   "main": "source/FlyTypograf.js",
