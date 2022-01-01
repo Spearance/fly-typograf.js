@@ -217,10 +217,10 @@ export class FlyTypograf {
 		},
 		{
 			// Up index symbols
-			pattern: /\b\^([0-9—+-=\(\)]|[oо"])/g,
-			replace: (str, $1) => {
+			pattern: /(\S)\^([0-9—+-=\(\)]|[oо"])/gi,
+			replace: (str, $1, $2) => {
 				this.#caretPosition--
-				return this.#upIndex.literals[$1] ? this.#upIndex.literals[$1] : $1
+				return `${$1}${this.#upIndex.literals[$2] ? this.#upIndex.literals[$2] : $2}`
 			}
 		},
 		{
