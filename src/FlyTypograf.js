@@ -13,7 +13,7 @@
 	Date: Dec 26, 2021
  */
 
-export class FlyTypograf {
+export default class FlyTypograf {
 	#original = ``
 	#result = ``
 	#caretPosition = 0
