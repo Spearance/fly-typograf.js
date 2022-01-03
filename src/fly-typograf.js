@@ -1,19 +1,18 @@
 /*
-	FlyTypograf.js
+	fly-typograf.js
 
-	https://github.com/Spearance/FlyTypograf.js
-	https://typograf.ru
+	https://github.com/Spearance/fly-typograf.js
 
 	Copyright 2021, Evgeniy Lepeshkin
 
 	Released under the MIT license.
 	http://www.opensource.org/licenses/mit-license.php
 
-	Version: v 1.2.2
-	Date: Dec 26, 2021
+	Version: v 1.2.3
+	Date: Jan 5, 2022
  */
 
-export class FlyTypograf {
+export default class FlyTypograf {
 	#original = ``
 	#result = ``
 	#caretPosition = 0
