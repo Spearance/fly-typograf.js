@@ -1,4 +1,4 @@
-import {FlyTypograf} from './FlyTypograf.js';
+import FlyTypograf from './fly-typograf.js';
 
 // Usage FlyTypograf
 const textarea = document.querySelector(`#typograf`)
