@@ -44,17 +44,17 @@ npm install fly-typograf
 ## Пример подключения ##
 
 ```javascript
-import {FlyTypograf} from 'FlyTypograf.js';
+import FlyTypograf from 'fly-typograf.js';
 
-const textarea = document.querySelector(`textarea`)
+const textarea = document.querySelector(`textarea`);
 
-const Typograf = new FlyTypograf(textarea)
+const Typograf = new FlyTypograf(textarea);
 
 const onTextAreaInput = () => {
-  Typograf.process()
+  Typograf.process();
 }
 
-textarea.addEventListener(`input`, onTextAreaInput)
+textarea.addEventListener(`input`, onTextAreaInput);
 ```
 
 ## На что обратить внимание! ##
