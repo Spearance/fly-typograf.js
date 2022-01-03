@@ -1,10 +1,15 @@
-# Типограф #
+# Флай Типограф #
+
+[![NPM version](https://img.shields.io/npm/v/fly-typograf.js.svg?style=flat)](https://www.npmjs.com/package/fly-typograf)
+[![NPM downloads](https://img.shields.io/npm/dm/fly-typograf.js.svg?style=flat)](https://www.npmjs.com/package/fly-typograf)
 
 Автотипографика текста в полях `<input>`, `<textarea>` и `contenteditable="true"` на лету.
 
 ## Что делает Типограф? ##
 
 Верстает текст внутри полей `<input>` и `<textarea>` автоматически при наборе с клавиатуры.
+
+![fly-typograf демо](./src/assets/fly-typograf.gif)
 
 Умеет:
 * Заменять кавычки, тире, спецсимволы: `…`, `©`, `®`, `™`, `₽`, `±`, `÷`
@@ -30,6 +35,12 @@
 | Степень | `12^2` | `12²` | — |
 | Дюймы | `32^"` | `32″` | — |
 | Градусы | `+32С^o` | `+32С°` | — |
+
+## Установка ##
+
+```
+npm install fly-typograf
+```
 
 ## На что обратить внимание! ##
 
