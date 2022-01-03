@@ -15,7 +15,7 @@ textarea.addEventListener(`input`, onTextAreaInput)
 // Highlight changed text for demo only
 const highLight = document.querySelector(`#highLight`)
 
-textarea.addEventListener(`keyup`, () => {
+const printHighLighted = () => {
 	const tags = []
 	highLight.innerHTML = `
 		<p>
@@ -38,4 +38,36 @@ textarea.addEventListener(`keyup`, () => {
 			}
 		</p>
 	`
-});
+}
+
+textarea.addEventListener(`keyup`, printHighLighted);
+
+
+// autotype example
+const example = document.querySelector(`#example`).innerText
+const button = document.querySelector(`#type`)
+
+const onButtonClick = () => {
+	textarea.value = ``
+	let count = 0
+
+	let timer = setInterval(() => {
+		textarea.value = example.substring(0, count + 1)
+
+		count = textarea.value.length
+
+		Typograf.process()
+
+		if (count < textarea.value.length) {
+			count = textarea.value.length
+		}
+
+		printHighLighted()
+
+		if (example.substring(0, count + 1).length >= example.length) {
+			clearInterval(timer)
+		}
+	}, 100)
+}
+
+button.addEventListener(`click`, onButtonClick)
