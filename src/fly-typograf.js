@@ -39,7 +39,7 @@ export default class FlyTypograf {
 	    "5/8": `⅝`,
 	    "7/8": `⅞`
 	  },
-	  str: function () {
+	  values: function () {
 	    return Object.values(this.literals).join(``)
 	  }
 	}
@@ -65,7 +65,7 @@ export default class FlyTypograf {
 			"о": `°`,	// ru `o`
 			"\"": `″`
 		},
-		str: function () {
+		values: function () {
 	    return Object.values(this.literals).join(``)
 	  }
 	}
@@ -87,8 +87,15 @@ export default class FlyTypograf {
 			replace: ` `
 		},
 		{
+			pattern: /(?<!-)--(?!-)/g,
+			replace: (str) => {
+				this.#caretPosition--
+				return `-`
+			}
+		},
+		{
 			// Remove dashes, ndashes and minuses
-			pattern: /[—–−]/g,
+			pattern: /([—–−])/g,
 			replace: `-`
 		}
 	]
@@ -98,14 +105,6 @@ export default class FlyTypograf {
 			// Minus sign
 			pattern: /(?<= |^|\d)-(?=\d)/g,
 			replace: `−`
-		},
-		{
-			// Double hyphen
-			pattern: /(?<![!])--(?!>)/g,
-			replace: () => {
-				this.#caretPosition--
-				return `-`
-			}
 		},
 		{
 			// Plus/Minus +/-
@@ -125,7 +124,7 @@ export default class FlyTypograf {
 		},
 		{
 			// Dash sign
-			pattern: /(?<= |^|>|[^-!а-яёa-z0-9])-(?= |$|[^-])/gmi,
+			pattern: /(?<= |^|>|[^-!а-яёa-z0-9])-(?= |$|[^-])/gi,
 			replace: `—`
 		},
 		{
@@ -135,7 +134,7 @@ export default class FlyTypograf {
 		},
 		{
 			// Dash sign with non-breaking space
-			pattern: /([ ]+)—([ ]*?)([a-zа-яё0-9])/gmi,
+			pattern: /([ ]+)—([ ]*?)(["«a-zа-яё0-9])/gmi,
 			replace: (str, $1, $2, $3) => {
 				this.#caretPosition -= ($1.length ? $1.length - 1 : 0) + ($2.length ? $2.length - 1 : 0)
 				return ` —\u00A0${$3}`
@@ -143,11 +142,16 @@ export default class FlyTypograf {
 		},
 		{
 			// Numerical interval
-			pattern: new RegExp(`(\\d|[${this.#decimal.str()}])\\s?[-—]\\s?(\\d|[${this.#decimal.str()}])`, `g`),
+			pattern: new RegExp(`(\\d|[${this.#decimal.values()}])[ \u00A0]?[-—][ \u00A0]?(\\d|[${this.#decimal.values()}])`, `g`),
 			replace: (str, $1, $2) => {
 				this.#caretPosition -= str.length - `${$1}−${$2}`.length
 				return `${$1}−${$2}`
 			}
+		},
+		{
+			// Fix minus at start line
+			pattern: /—(?=\d)/g,
+			replace: `−`
 		},
 		{
 			// Copyright (c)
@@ -183,7 +187,7 @@ export default class FlyTypograf {
 		},
 		{
 			// Three dots
-			pattern: /(?<![.…])\.{3}/g,
+			pattern: /(?<![.…])\.{3}(?!\.)/g,
 			replace: () => {
 				this.#caretPosition -= 2
 				return `…`
@@ -214,7 +218,7 @@ export default class FlyTypograf {
 		},
 		{
 			// Fix decimal with next number
-			pattern: new RegExp(`([${this.#decimal.str()}])(\\d)`, `g`),
+			pattern: new RegExp(`([${this.#decimal.values()}])(\\d)`, `g`),
 			replace: (str, $1, $2) => {
 				this.#caretPosition += 2
 				return `${Object.entries(this.#decimal.literals).find(i => i[1] === $1)[0]}${$2}`
@@ -230,14 +234,14 @@ export default class FlyTypograf {
 		},
 		{
 			// Move up number up index symbols
-			pattern: new RegExp(`([${this.#upIndex.str()}])(?![ .])([0-9+-=\(\)])`, `g`),
+			pattern: new RegExp(`([${this.#upIndex.values()}])(?![ .])([0-9+-=\(\)])`, `g`),
 			replace: (str, $1, $2) => {
 				return `${$1}${this.#upIndex.literals[$2]}`
 			}
 		},
 		{
 			// Convert up index то number after space
-			pattern: new RegExp(` ([${this.#upIndex.str()}])`, `g`),
+			pattern: new RegExp(` ([${this.#upIndex.values()}])`, `g`),
 			replace: (str, $1) => {
 				for (let key in this.#upIndex.literals) {
 					if (this.#upIndex.literals[key] === $1) {
