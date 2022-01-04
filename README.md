@@ -1,10 +1,15 @@
-# Типограф #
+# Флай Типограф #
+
+[![NPM version](https://img.shields.io/npm/v/fly-typograf.js.svg?style=flat)](https://www.npmjs.com/package/fly-typograf)
+[![NPM downloads](https://img.shields.io/npm/dm/fly-typograf.js.svg?style=flat)](https://www.npmjs.com/package/fly-typograf)
 
 Автотипографика текста в полях `<input>`, `<textarea>` и `contenteditable="true"` на лету.
 
 ## Что делает Типограф? ##
 
 Верстает текст внутри полей `<input>` и `<textarea>` автоматически при наборе с клавиатуры.
+
+![fly-typograf демо](./src/assets/fly-typograf.gif)
 
 Умеет:
 * Заменять кавычки, тире, спецсимволы: `…`, `©`, `®`, `™`, `₽`, `±`, `÷`
@@ -14,9 +19,9 @@
 * Ставить степени, градусы, дюймы
 * Разрешает писать HTML и комментарии к нему
 
-Пример работы [Типографа](https://spearance.github.io/FlyTypograf.js/example)
+Пример работы [Типографа](https://spearance.github.io/fly-typograf.js/example)
 
-> FlyTypograf.js не является полноценной заменой он-лайн сервиса [typograf.ru](https://typograf.ru) и не может им быть, потому что содержит гораздо меньше правил проверки, но он помогает снять до 80% вопросов экранной типографики.
+> fly-typograf.js не является полноценной заменой он-лайн сервиса [typograf.ru](https://typograf.ru) и не может им быть, потому что содержит гораздо меньше правил проверки, но он помогает снять до 80% вопросов экранной типографики.
 
 ## Как записывать разные символы? ##
 | Название | Запись | Замена | Раскладка |
@@ -30,6 +35,27 @@
 | Степень | `12^2` | `12²` | — |
 | Дюймы | `32^"` | `32″` | — |
 | Градусы | `+32С^o` | `+32С°` | — |
+
+## Установка ##
+
+```
+npm install fly-typograf
+```
+## Пример подключения ##
+
+```javascript
+import FlyTypograf from 'fly-typograf.js';
+
+const textarea = document.querySelector(`textarea`);
+
+const Typograf = new FlyTypograf(textarea);
+
+const onTextAreaInput = () => {
+  Typograf.process();
+}
+
+textarea.addEventListener(`input`, onTextAreaInput);
+```
 
 ## На что обратить внимание! ##
 

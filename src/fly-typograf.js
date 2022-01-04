@@ -1,25 +1,22 @@
 /*
-	FlyTypograf.js
-
-	https://github.com/Spearance/FlyTypograf.js
-	https://typograf.ru
+	https://github.com/Spearance/fly-typograf.js
 
 	Copyright 2021, Evgeniy Lepeshkin
 
 	Released under the MIT license.
 	http://www.opensource.org/licenses/mit-license.php
 
-	Version: v 1.2.2
-	Date: Dec 26, 2021
+	Version: v 1.2.3
+	Date: Jan 5, 2022
  */
 
-export class FlyTypograf {
+export default class FlyTypograf {
 	#original = ``
 	#result = ``
 	#caretPosition = 0
 
-	#leftQuote = `«`
-	#rightQuote = `»`
+	#leftOutQuote = `«`
+	#rightOutQuote = `»`
 
 	#decimal = {
 	  literals: {
@@ -42,7 +39,7 @@ export class FlyTypograf {
 	    "5/8": `⅝`,
 	    "7/8": `⅞`
 	  },
-	  str: function () {
+	  values: function () {
 	    return Object.values(this.literals).join(``)
 	  }
 	}
@@ -68,7 +65,7 @@ export class FlyTypograf {
 			"о": `°`,	// ru `o`
 			"\"": `″`
 		},
-		str: function () {
+		values: function () {
 	    return Object.values(this.literals).join(``)
 	  }
 	}
@@ -90,8 +87,16 @@ export class FlyTypograf {
 			replace: ` `
 		},
 		{
-			// Remove dashes and minuses
-			pattern: /[—–−]/g,
+			// Remove double dashes
+			pattern: /(?<!-)--(?!-)/g,
+			replace: (str) => {
+				this.#caretPosition--
+				return `-`
+			}
+		},
+		{
+			// Remove dashes, ndashes and minuses
+			pattern: /([—–−])/g,
 			replace: `-`
 		}
 	]
@@ -99,16 +104,8 @@ export class FlyTypograf {
 	#process = [
 		{
 			// Minus sign
-			pattern: /(?<= |^|\d)-(?=\d)/g,
+			pattern: new RegExp(`(?<= |^|\\d|[${this.#decimal.values()}])-(?=\\d|[${this.#decimal.values()}])`, `g`),
 			replace: `−`
-		},
-		{
-			// Double hyphen
-			pattern: /(?<![!])--(?!>)/g,
-			replace: () => {
-				this.#caretPosition--
-				return `-`
-			}
 		},
 		{
 			// Plus/Minus +/-
@@ -128,29 +125,26 @@ export class FlyTypograf {
 		},
 		{
 			// Dash sign
-			pattern: /(?<= |^|>|[^-!а-яёa-z0-9])-(?= |$|[^-])/gmi,
+			pattern: /(?<= |^|>|[^-!а-яёa-z0-9])-(?= |$|[^-])/gi,
 			replace: `—`
 		},
 		{
 			// Non-breaking space with dash sign
-			pattern: /(?<!^|[":;.!?…, ]) —(?!-)/gm,
+			pattern: /(?<!^|["»:;.!?…, ]) —(?!-)/gm,
 			replace: `\u00A0—`
 		},
 		{
 			// Dash sign with non-breaking space
-			pattern: /([ ]+)—([ ]*?)([a-zа-яё0-9])/gmi,
+			pattern: /([ ]+)—([ ]*?)(["«a-zа-яё0-9])/gmi,
 			replace: (str, $1, $2, $3) => {
 				this.#caretPosition -= ($1.length ? $1.length - 1 : 0) + ($2.length ? $2.length - 1 : 0)
 				return ` —\u00A0${$3}`
 			}
 		},
 		{
-			// Numerical interval
-			pattern: new RegExp(`(\\d|[${this.#decimal.str()}])\\s?[-—]\\s?(\\d|[${this.#decimal.str()}])`, `g`),
-			replace: (str, $1, $2) => {
-				this.#caretPosition -= str.length - `${$1}−${$2}`.length
-				return `${$1}−${$2}`
-			}
+			// Fix minus at start line
+			pattern: /—(?=\d)/g,
+			replace: `−`
 		},
 		{
 			// Copyright (c)
@@ -186,7 +180,7 @@ export class FlyTypograf {
 		},
 		{
 			// Three dots
-			pattern: /(?<![.…])\.{3}/g,
+			pattern: /(?<![.…])\.{3}(?!\.)/g,
 			replace: () => {
 				this.#caretPosition -= 2
 				return `…`
@@ -217,7 +211,7 @@ export class FlyTypograf {
 		},
 		{
 			// Fix decimal with next number
-			pattern: new RegExp(`([${this.#decimal.str()}])(\\d)`, `g`),
+			pattern: new RegExp(`([${this.#decimal.values()}])(\\d)`, `g`),
 			replace: (str, $1, $2) => {
 				this.#caretPosition += 2
 				return `${Object.entries(this.#decimal.literals).find(i => i[1] === $1)[0]}${$2}`
@@ -233,16 +227,15 @@ export class FlyTypograf {
 		},
 		{
 			// Move up number up index symbols
-			pattern: new RegExp(`([${this.#upIndex.str()}])(?![ .])([0-9+-=\(\)])`, `g`),
+			pattern: new RegExp(`([${this.#upIndex.values()}])(?![ .])([0-9+-=\(\)])`, `g`),
 			replace: (str, $1, $2) => {
 				return `${$1}${this.#upIndex.literals[$2]}`
 			}
 		},
 		{
 			// Convert up index то number after space
-			pattern: new RegExp(` ([${this.#upIndex.str()}])`, `g`),
+			pattern: new RegExp(` ([${this.#upIndex.values()}])`, `g`),
 			replace: (str, $1) => {
-				console.log(this.#upIndex.str())
 				for (let key in this.#upIndex.literals) {
 					if (this.#upIndex.literals[key] === $1) {
 						return ` ${key}`
@@ -253,31 +246,31 @@ export class FlyTypograf {
 		{
 			// Open quote
 			pattern: /["»](\S)/ig,
-			replace: `${this.#leftQuote}$1`
+			replace: `${this.#leftOutQuote}$1`
 		},
 		{
 			// Close quote
 			pattern: /(\S)["«]/ig,
-			replace: `$1${this.#rightQuote}`
+			replace: `$1${this.#rightOutQuote}`
 		},
 		{
 			// Open quote
-			pattern: new RegExp(`"(${this.#leftQuote}[a-zа-яё0-9…])`, `ig`),
-			replace: `${this.#leftQuote}$1`
+			pattern: new RegExp(`"(${this.#leftOutQuote}[a-zа-яё0-9…])`, `ig`),
+			replace: `${this.#leftOutQuote}$1`
 		},
 		{
 			// Close quote
-			pattern: new RegExp(`([a-zа-яё0-9…?!]${this.#rightQuote})"`, `ig`),
-			replace: `$1${this.#rightQuote}`
+			pattern: new RegExp(`([a-zа-яё0-9…?!]${this.#rightOutQuote})"`, `ig`),
+			replace: `$1${this.#rightOutQuote}`
 		},
 		{
 			// Fix HTML open quotes
-			pattern: new RegExp(`([-a-z0-9]+=)[${this.#leftQuote}${this.#rightQuote}]([^${this.#leftQuote}${this.#rightQuote}]*?)`, `ig`),
+			pattern: new RegExp(`([-a-z0-9]+=)[${this.#leftOutQuote}${this.#rightOutQuote}]([^${this.#leftOutQuote}${this.#rightOutQuote}]*?)`, `ig`),
 			replace: `$1"$2`
 		},
 		{
 			// Fix HTML close quotes
-			pattern: new RegExp(`([-a-z0-9]+=)[\"]([^>${this.#leftQuote}${this.#rightQuote}]*?)[${this.#leftQuote}${this.#rightQuote}]`, `ig`),
+			pattern: new RegExp(`([-a-z0-9]+=)[\"]([^>${this.#leftOutQuote}${this.#rightOutQuote}]*?)[${this.#leftOutQuote}${this.#rightOutQuote}]`, `ig`),
 			replace: `$1"$2"`
 		},
 		{
@@ -287,7 +280,7 @@ export class FlyTypograf {
 		},
 		{
 			// Minutes and seconds
-			pattern: new RegExp(`([0-6]?[0-9])[\'\′]([0-6]?[0-9])?(\\d+)[${this.#rightQuote}\"]`, `g`),
+			pattern: new RegExp(`([0-6]?[0-9])[\'\′]([0-6]?[0-9])?(\\d+)[${this.#rightOutQuote}\"]`, `g`),
 			replace: `$1′$2$3″`
 		},
 		{
@@ -312,8 +305,8 @@ export class FlyTypograf {
 		this._isContentEditable = this._element.contentEditable === true
 
 		if (preference) {
-			this.#leftQuote = preference.leftQuote || `«`
-			this.#rightQuote = preference.rightQuote || `«`
+			this.#leftOutQuote = preference.leftOutQuote || `«`
+			this.#rightOutQuote = preference.rightOutQuote || `»`
 		}
 	}
 

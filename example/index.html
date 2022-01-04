@@ -2,7 +2,7 @@
 <html lang="ru-RU">
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8">
-		<title>Типограф</title>
+		<title>fly-typograf.js</title>
 		<meta name="copyright" content="2021, © Evgeniy Lepeshkin">
 		<style>
 			html, body {
@@ -11,18 +11,22 @@
 				font-size: 110%;
 			}
 
+			main {
+				min-width: 300px;
+				max-width: 1200px;
+				margin: 0 auto;
+			}
+
 			textarea {
-				font-family: 'Menlo', 'Consolas', 'DejaVu Sans Mono', monospace;
+				font-family: 'Times New Roman', sans-serif;
 				border: none;
 				box-shadow: 0 0 50px 0 rgba(70, 70, 70, 0.5);
 				margin: 50px, 0;
-				min-width: 300px;
 				width: 100%;
-				max-width: 800px;
 				height: 300px;
 				resize: none;
 				outline: none;
-				font-size: 75%;
+				font-size: 100%;
 				padding: 20px;
 			}
 
@@ -32,28 +36,25 @@
 
 	</head>
 	<body>
-		<h1>FlyTypograf.js</h1>
-		<small>версия: 1.2.2</small>
+		<main>
+			<h1>fly-typograf.js</h1>
+			<small>версия: 1.2.3</small>
 
-		<p>Наберите текст: "Вы все еще кое-как верстаете в "Word-е"? - Тогда мы идем к вам!"</p>
+			<p>Наберите текст:</p>
+			<pre id="example">
+- Кое-как добились погрешности в пределах 1/2-1/4. А дело-то простое, как "2+2=4"! - Помню, в 2017-м году такое уже делали.
+Ходил вчера в аптеку, а там табличка: "Перерыв 13:00-14:00 ч."! Зашел в Starbucks(TM), выпил кофе за 299,99(Р).
+В телефоне полазил, скоротал минут 30-40. Смотрю на часы - 13:55. Ну, думаю, пора!
+			</pre>
+			<p>Или нажмите: <button id="type">напечатать</button></p>
 
-		<textarea placeholder="начните писать..." autocomplete="off" id="typograf" autofocus=""></textarea>
+			<textarea placeholder="начните писать..." autocomplete="off" id="typograf" autofocus=""></textarea>
 
-		<h3>С подсветкой изменений</h3>
-		<p id="highLight">начните писать...</p>
+			<h3>Подсветка изменений</h3>
+			<p id="highLight">начните писать...</p>
 
-		<h3>Умеет:</h3>
-			<ul>
-				<li>Заменять кавычки, тире, спецсимволы: …, ©, ®, ™, ₽, ±, ÷</li>
-				<li>Ставить простые дроби: ½, ⅓, ¼, ⅕, ⅙, ⅐, ⅛, ⅑, ⅒, ⅔, ⅖, ¾, ⅗, ⅜, ⅘, ⅚, ⅝, ⅞</li>
-				<li>Ставить минус между числами и &times; между размерными единицами</li>
-				<li>Привязывать неразрывным пробелом союзы и предлоги к последующим словам, а частицы к предыдущим</li>
-				<li>Ставить степени, градусы, дюймы</li>
-				<li>Разрешает писать HTML и комментарии к нему</li>
-			</ul>
-
-		<p>Ссылка на <a href="https://github.com/Spearance/FlyTypograf.js">GitHub</a></p>
-
+			<p>Ссылка на репозиторий на <a href="https://github.com/Spearance/fly-typograf.js">GitHub</a></p>
+		</main>
 		<script src="./example.js"></script>
 	</body>
 </html>

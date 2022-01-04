@@ -1,9 +1,9 @@
 {
   "name": "fly-typograf.js",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "license": "MIT",
   "description": "Correct punctuation, non-breaking spaces and special characters in <input> and <textarea> on fly",
-  "main": "source/FlyTypograf.js",
+  "main": "src/fly-typograf.js",
   "author": {
     "name": "Evgeniy Lepeshkin",
     "email": "mail@spearance.ru",
@@ -19,12 +19,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Spearance/FlyTypograf.js.git"
+    "url": "git+https://github.com/Spearance/fly-typograf.js.git"
   },
   "bugs": {
-    "url": "https://github.com/Spearance/FlyTypograf.js/issues"
+    "url": "https://github.com/Spearance/fly-typograf.js/issues"
   },
-  "homepage": "https://github.com/Spearance/FlyTypograf.js#readme",
+  "homepage": "https://github.com/Spearance/fly-typograf.js#readme",
   "scripts": {
     "eslint": "eslint src/",
     "test": "npm run eslint",
@@ -32,19 +32,13 @@
     "start": "webpack serve --mode development --open"
   },
   "devDependencies": {
-    "@babel/core": "7.16.0",
-    "@babel/eslint-parser": "7.16.0",
-    "@babel/plugin-proposal-class-properties": "7.16.0",
-    "@babel/plugin-proposal-nullish-coalescing-operator": "7.16.0",
-    "@babel/plugin-proposal-optional-chaining": "7.16.0",
-    "@babel/plugin-proposal-private-methods": "^7.16.5",
-    "babel-loader": "8.2.3",
-    "eslint": "^8.5.0",
-    "webpack": "^5.62.1",
+    "@babel/core": "^7.16.0",
+    "@babel/eslint-parser": "^7.16.5",
+    "@babel/preset-env": "^7.16.7",
+    "babel-loader": "^8.2.3",
+    "eslint": "^8.6.0",
+    "webpack": "^5.65.0",
     "webpack-cli": "^4.9.1",
-    "webpack-dev-server": "^4.4.0"
-  },
-  "engines": {
-    "node": "16"
+    "webpack-dev-server": "^4.7.2"
   }
 }
