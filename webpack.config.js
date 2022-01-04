@@ -1,15 +1,17 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/example.js',
-  output: {
-    filename: 'example.js',
-    path: path.resolve(__dirname, 'example')
+  entry: {
+		"example": path.join(__dirname, './src/example.js')
+	},
+	output: {
+		path: path.resolve(__dirname, 'example'),
+		filename: '[name].js'
 	},
 	devServer: {
 		static: './example',
 		compress: true,
-		hot: false
+		hot: true
   },
   module: {
     rules: [
