@@ -88,7 +88,7 @@ export default class FlyTypograf {
 		},
 		{
 			// Remove double dashes
-			pattern: /(?<!-)--(?!-)/g,
+			pattern: /(?<![!-])--(?![->])/g,
 			replace: (str) => {
 				this.#caretPosition--
 				return `-`
@@ -245,13 +245,13 @@ export default class FlyTypograf {
 		},
 		{
 			// Open quote
-			pattern: /["»](\S)/ig,
-			replace: `${this.#leftOutQuote}$1`
+			pattern: /["»](?=\S)/g,
+			replace: this.#leftOutQuote
 		},
 		{
 			// Close quote
-			pattern: /(\S)["«]/ig,
-			replace: `$1${this.#rightOutQuote}`
+			pattern: /(?<=\S)["«]/g,
+			replace: this.#rightOutQuote
 		},
 		{
 			// Open quote
