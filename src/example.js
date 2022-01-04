@@ -44,16 +44,37 @@ textarea.addEventListener(`keyup`, printHighLighted);
 
 
 // autotype example
+const INTERVAL = 100;
+const Button = {
+	START: `напечатать`,
+	STOP: `остановить`
+}
+
 const example = document.querySelector(`#example`).innerText
 const button = document.querySelector(`#type`)
 
+let timer = null;
+
+const returnState = () => {
+	clearInterval(timer)
+	button.textContent = Button.START
+	timer = null
+}
+
 const onButtonClick = () => {
+	if (timer) {
+		returnState()
+		return
+	}
+
 	textarea.value = ``
+	button.textContent = Button.STOP
 	let count = 0
 
-	let timer = setInterval(() => {
-		textarea.value = example.substring(0, count + 1)
+	timer = setInterval(() => {
+		const currentText = example.substring(0, count + 1)
 
+		textarea.value = currentText
 		count = textarea.value.length
 
 		Typograf.process()
@@ -64,10 +85,10 @@ const onButtonClick = () => {
 
 		printHighLighted()
 
-		if (example.substring(0, count + 1).length >= example.length) {
-			clearInterval(timer)
+		if (currentText.length >= example.length) {
+			returnState()
 		}
-	}, 100)
+	}, INTERVAL)
 }
 
 button.addEventListener(`click`, onButtonClick)
