@@ -87,6 +87,7 @@ export default class FlyTypograf {
 			replace: ` `
 		},
 		{
+			// Remove double dashes
 			pattern: /(?<!-)--(?!-)/g,
 			replace: (str) => {
 				this.#caretPosition--
@@ -103,7 +104,7 @@ export default class FlyTypograf {
 	#process = [
 		{
 			// Minus sign
-			pattern: /(?<= |^|\d)-(?=\d)/g,
+			pattern: new RegExp(`(?<= |^|\\d|[${this.#decimal.values()}])-(?=\\d|[${this.#decimal.values()}])`, `g`),
 			replace: `−`
 		},
 		{
@@ -129,7 +130,7 @@ export default class FlyTypograf {
 		},
 		{
 			// Non-breaking space with dash sign
-			pattern: /(?<!^|[":;.!?…, ]) —(?!-)/gm,
+			pattern: /(?<!^|["»:;.!?…, ]) —(?!-)/gm,
 			replace: `\u00A0—`
 		},
 		{
@@ -138,14 +139,6 @@ export default class FlyTypograf {
 			replace: (str, $1, $2, $3) => {
 				this.#caretPosition -= ($1.length ? $1.length - 1 : 0) + ($2.length ? $2.length - 1 : 0)
 				return ` —\u00A0${$3}`
-			}
-		},
-		{
-			// Numerical interval
-			pattern: new RegExp(`(\\d|[${this.#decimal.values()}])[ \u00A0]?[-—][ \u00A0]?(\\d|[${this.#decimal.values()}])`, `g`),
-			replace: (str, $1, $2) => {
-				this.#caretPosition -= str.length - `${$1}−${$2}`.length
-				return `${$1}−${$2}`
 			}
 		},
 		{
