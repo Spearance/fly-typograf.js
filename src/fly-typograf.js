@@ -1,6 +1,4 @@
 /*
-	fly-typograf.js
-
 	https://github.com/Spearance/fly-typograf.js
 
 	Copyright 2021, Evgeniy Lepeshkin
@@ -17,8 +15,8 @@ export default class FlyTypograf {
 	#result = ``
 	#caretPosition = 0
 
-	#leftQuote = `«`
-	#rightQuote = `»`
+	#leftOutQuote = `«`
+	#rightOutQuote = `»`
 
 	#decimal = {
 	  literals: {
@@ -89,7 +87,7 @@ export default class FlyTypograf {
 			replace: ` `
 		},
 		{
-			// Remove dashes and minuses
+			// Remove dashes, ndashes and minuses
 			pattern: /[—–−]/g,
 			replace: `-`
 		}
@@ -241,7 +239,6 @@ export default class FlyTypograf {
 			// Convert up index то number after space
 			pattern: new RegExp(` ([${this.#upIndex.str()}])`, `g`),
 			replace: (str, $1) => {
-				console.log(this.#upIndex.str())
 				for (let key in this.#upIndex.literals) {
 					if (this.#upIndex.literals[key] === $1) {
 						return ` ${key}`
@@ -252,31 +249,31 @@ export default class FlyTypograf {
 		{
 			// Open quote
 			pattern: /["»](\S)/ig,
-			replace: `${this.#leftQuote}$1`
+			replace: `${this.#leftOutQuote}$1`
 		},
 		{
 			// Close quote
 			pattern: /(\S)["«]/ig,
-			replace: `$1${this.#rightQuote}`
+			replace: `$1${this.#rightOutQuote}`
 		},
 		{
 			// Open quote
-			pattern: new RegExp(`"(${this.#leftQuote}[a-zа-яё0-9…])`, `ig`),
-			replace: `${this.#leftQuote}$1`
+			pattern: new RegExp(`"(${this.#leftOutQuote}[a-zа-яё0-9…])`, `ig`),
+			replace: `${this.#leftOutQuote}$1`
 		},
 		{
 			// Close quote
-			pattern: new RegExp(`([a-zа-яё0-9…?!]${this.#rightQuote})"`, `ig`),
-			replace: `$1${this.#rightQuote}`
+			pattern: new RegExp(`([a-zа-яё0-9…?!]${this.#rightOutQuote})"`, `ig`),
+			replace: `$1${this.#rightOutQuote}`
 		},
 		{
 			// Fix HTML open quotes
-			pattern: new RegExp(`([-a-z0-9]+=)[${this.#leftQuote}${this.#rightQuote}]([^${this.#leftQuote}${this.#rightQuote}]*?)`, `ig`),
+			pattern: new RegExp(`([-a-z0-9]+=)[${this.#leftOutQuote}${this.#rightOutQuote}]([^${this.#leftOutQuote}${this.#rightOutQuote}]*?)`, `ig`),
 			replace: `$1"$2`
 		},
 		{
 			// Fix HTML close quotes
-			pattern: new RegExp(`([-a-z0-9]+=)[\"]([^>${this.#leftQuote}${this.#rightQuote}]*?)[${this.#leftQuote}${this.#rightQuote}]`, `ig`),
+			pattern: new RegExp(`([-a-z0-9]+=)[\"]([^>${this.#leftOutQuote}${this.#rightOutQuote}]*?)[${this.#leftOutQuote}${this.#rightOutQuote}]`, `ig`),
 			replace: `$1"$2"`
 		},
 		{
@@ -286,7 +283,7 @@ export default class FlyTypograf {
 		},
 		{
 			// Minutes and seconds
-			pattern: new RegExp(`([0-6]?[0-9])[\'\′]([0-6]?[0-9])?(\\d+)[${this.#rightQuote}\"]`, `g`),
+			pattern: new RegExp(`([0-6]?[0-9])[\'\′]([0-6]?[0-9])?(\\d+)[${this.#rightOutQuote}\"]`, `g`),
 			replace: `$1′$2$3″`
 		},
 		{
@@ -311,8 +308,8 @@ export default class FlyTypograf {
 		this._isContentEditable = this._element.contentEditable === true
 
 		if (preference) {
-			this.#leftQuote = preference.leftQuote || `«`
-			this.#rightQuote = preference.rightQuote || `«`
+			this.#leftOutQuote = preference.leftOutQuote || `«`
+			this.#rightOutQuote = preference.rightOutQuote || `»`
 		}
 	}
 
