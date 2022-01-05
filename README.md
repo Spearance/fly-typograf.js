@@ -1,7 +1,7 @@
 # Флай Типограф #
 
-[![NPM version](https://img.shields.io/npm/v/fly-typograf.js.svg?style=flat)](https://www.npmjs.com/package/fly-typograf)
-[![NPM downloads](https://img.shields.io/npm/dm/fly-typograf.js.svg?style=flat)](https://www.npmjs.com/package/fly-typograf)
+[![NPM version](https://img.shields.io/npm/v/fly-typograf.js.svg?style=flat)](https://www.npmjs.com/package/fly-typograf.js)
+[![NPM downloads](https://img.shields.io/npm/dm/fly-typograf.js.svg?style=flat)](https://www.npmjs.com/package/fly-typograf.js)
 
 Автотипографика текста в полях `<input>`, `<textarea>` и `contenteditable="true"` на лету.
 
