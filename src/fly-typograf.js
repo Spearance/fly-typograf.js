@@ -11,7 +11,6 @@
  */
 
 export default class FlyTypograf {
-	#original = ``
 	#result = ``
 	#caretPosition = 0
 
@@ -70,6 +69,7 @@ export default class FlyTypograf {
 	  }
 	}
 
+	// rules for preparing text
 	#prepare = [
 		{
 			// Remove non-breaking space with simple space
@@ -89,7 +89,7 @@ export default class FlyTypograf {
 		{
 			// Remove double dashes
 			pattern: /(?<![!-])--(?![->])/g,
-			replace: (str) => {
+			replace: () => {
 				this.#caretPosition--
 				return `-`
 			}
@@ -101,6 +101,7 @@ export default class FlyTypograf {
 		}
 	]
 
+	// basic rules
 	#process = [
 		{
 			// Minus sign
@@ -203,7 +204,7 @@ export default class FlyTypograf {
 			// Decimal like 1/2
 			pattern: /\b([123457]\/(?:[2-9]|10))\b/g,
 			replace: (str, $1) => {
-				if (this.#decimal.literals[`${$1}`]) {
+				if (this.#decimal.literals[$1]) {
 					this.#caretPosition -= 2
 				}
 				return this.#decimal.literals[$1] ? this.#decimal.literals[$1] : $1
@@ -300,6 +301,7 @@ export default class FlyTypograf {
 		}
 	];
 
+
 	constructor (textElement, preference) {
 		this._element = textElement
 		this._isContentEditable = this._element.contentEditable === true
@@ -310,7 +312,7 @@ export default class FlyTypograf {
 		}
 	}
 
-	get result() {
+	get result () {
 		return this.#result
 	}
 
@@ -318,20 +320,19 @@ export default class FlyTypograf {
 		this.#result = this._element.value
 
 		this.#applyRules(this.#prepare)
-
-		this.#getCaretPosition()
-
 		this.#applyRules(this.#process)
+	}
+
+	#applyRules (array) {
+		this.#caretPosition = this.#getCaretPosition()
+
+		array.forEach(regex => {
+			this.#result = this.#result.replace(regex.pattern, regex.replace)
+		})
 
 		this._element.value = this.#result
 
 		this.#setCaretPosition(this.#caretPosition)
-	}
-
-	#applyRules (array) {
-		array.forEach((regex) => {
-			this.#result = this.#result.replace(regex.pattern, regex.replace)
-		})
 	}
 
 	#getCaretPosition () {
@@ -340,11 +341,11 @@ export default class FlyTypograf {
 			let _range = document.getSelection().getRangeAt(0)
 			let range = _range.cloneRange()
 			range.selectNodeContents(this._element)
-			range.setEnd(_rang.endContainer, _range.endOffset)
+			range.setEnd(_range.endContainer, _range.endOffset)
 			return range.toString().length
 		}
 
-		this.#caretPosition = this._element.selectionStart
+		return this._element.selectionStart
 	}
 
 	#setCaretPosition (pos) {
