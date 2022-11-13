@@ -6,8 +6,8 @@
 	Released under the MIT license.
 	http://www.opensource.org/licenses/mit-license.php
 
-	Version: v 1.2.3
-	Date: Jan 4, 2022
+	Version: v 1.2.7
+	Date: Nov 13, 2022
  */
 
 export default class FlyTypograf {
