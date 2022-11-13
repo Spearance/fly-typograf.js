@@ -6,12 +6,11 @@
 	Released under the MIT license.
 	http://www.opensource.org/licenses/mit-license.php
 
-	Version: v 1.2.3
-	Date: Jan 4, 2022
+	Version: v 1.2.7
+	Date: Nov 13, 2022
  */
 
 export default class FlyTypograf {
-	#original = ``
 	#result = ``
 	#caretPosition = 0
 
@@ -19,29 +18,29 @@ export default class FlyTypograf {
 	#rightOutQuote = `»`
 
 	#decimal = {
-	  literals: {
-	    "1/2": `½`,
-	    "1/3": `⅓`,
-	    "1/4": `¼`,
-	    "1/5": `⅕`,
-	    "1/6": `⅙`,
-	    "1/7": `⅐`,
-	    "1/8": `⅛`,
-	    "1/9": `⅑`,
-	    "1/10": `⅒`,
-	    "2/3": `⅔`,
-	    "2/5": `⅖`,
-	    "3/4": `¾`,
-	    "3/5": `⅗`,
-	    "3/8": `⅜`,
-	    "4/5": `⅘`,
-	    "5/6": `⅚`,
-	    "5/8": `⅝`,
-	    "7/8": `⅞`
-	  },
-	  values: function () {
-	    return Object.values(this.literals).join(``)
-	  }
+		literals: {
+			"1/2": `½`,
+			"1/3": `⅓`,
+			"1/4": `¼`,
+			"1/5": `⅕`,
+			"1/6": `⅙`,
+			"1/7": `⅐`,
+			"1/8": `⅛`,
+			"1/9": `⅑`,
+			"1/10": `⅒`,
+			"2/3": `⅔`,
+			"2/5": `⅖`,
+			"3/4": `¾`,
+			"3/5": `⅗`,
+			"3/8": `⅜`,
+			"4/5": `⅘`,
+			"5/6": `⅚`,
+			"5/8": `⅝`,
+			"7/8": `⅞`
+		},
+		values: function () {
+			return Object.values(this.literals).join(``)
+		}
 	}
 
 	#upIndex = {
@@ -66,10 +65,11 @@ export default class FlyTypograf {
 			"\"": `″`
 		},
 		values: function () {
-	    return Object.values(this.literals).join(``)
-	  }
+			return Object.values(this.literals).join(``)
+		}
 	}
 
+	// rules for preparing text
 	#prepare = [
 		{
 			// Remove non-breaking space with simple space
@@ -89,7 +89,7 @@ export default class FlyTypograf {
 		{
 			// Remove double dashes
 			pattern: /(?<![!-])--(?![->])/g,
-			replace: (str) => {
+			replace: () => {
 				this.#caretPosition--
 				return `-`
 			}
@@ -101,6 +101,7 @@ export default class FlyTypograf {
 		}
 	]
 
+	// basic rules
 	#process = [
 		{
 			// Minus sign
@@ -203,7 +204,7 @@ export default class FlyTypograf {
 			// Decimal like 1/2
 			pattern: /\b([123457]\/(?:[2-9]|10))\b/g,
 			replace: (str, $1) => {
-				if (this.#decimal.literals[`${$1}`]) {
+				if (this.#decimal.literals[$1]) {
 					this.#caretPosition -= 2
 				}
 				return this.#decimal.literals[$1] ? this.#decimal.literals[$1] : $1
@@ -219,7 +220,7 @@ export default class FlyTypograf {
 		},
 		{
 			// Up index symbols
-			pattern: /(\S)\^([0-9—+-=\(\)]|[oо"])/gi,
+			pattern: /(\S)\^([0-9—+-=()]|[oо"])/gi,
 			replace: (str, $1, $2) => {
 				this.#caretPosition--
 				return `${$1}${this.#upIndex.literals[$2] ? this.#upIndex.literals[$2] : $2}`
@@ -227,7 +228,7 @@ export default class FlyTypograf {
 		},
 		{
 			// Move up number up index symbols
-			pattern: new RegExp(`([${this.#upIndex.values()}])(?![ .])([0-9+-=\(\)])`, `g`),
+			pattern: new RegExp(`([${this.#upIndex.values()}])(?![ .])([0-9+-=()])`, `g`),
 			replace: (str, $1, $2) => {
 				return `${$1}${this.#upIndex.literals[$2]}`
 			}
@@ -270,7 +271,7 @@ export default class FlyTypograf {
 		},
 		{
 			// Fix HTML close quotes
-			pattern: new RegExp(`([-a-z0-9]+=)[\"]([^>${this.#leftOutQuote}${this.#rightOutQuote}]*?)[${this.#leftOutQuote}${this.#rightOutQuote}]`, `ig`),
+			pattern: new RegExp(`([-a-z0-9]+=)["]([^>${this.#leftOutQuote}${this.#rightOutQuote}]*?)[${this.#leftOutQuote}${this.#rightOutQuote}]`, `ig`),
 			replace: `$1"$2"`
 		},
 		{
@@ -280,7 +281,7 @@ export default class FlyTypograf {
 		},
 		{
 			// Minutes and seconds
-			pattern: new RegExp(`([0-6]?[0-9])[\'\′]([0-6]?[0-9])?(\\d+)[${this.#rightOutQuote}\"]`, `g`),
+			pattern: new RegExp(`([0-6]?[0-9])['′]([0-6]?[0-9])?(\\d+)[${this.#rightOutQuote}"]`, `g`),
 			replace: `$1′$2$3″`
 		},
 		{
@@ -300,6 +301,7 @@ export default class FlyTypograf {
 		}
 	];
 
+
 	constructor (textElement, preference) {
 		this._element = textElement
 		this._isContentEditable = this._element.contentEditable === true
@@ -310,7 +312,7 @@ export default class FlyTypograf {
 		}
 	}
 
-	get result() {
+	get result () {
 		return this.#result
 	}
 
@@ -318,20 +320,19 @@ export default class FlyTypograf {
 		this.#result = this._element.value
 
 		this.#applyRules(this.#prepare)
-
-		this.#getCaretPosition()
-
 		this.#applyRules(this.#process)
+	}
+
+	#applyRules (array) {
+		this.#caretPosition = this.#getCaretPosition()
+
+		array.forEach(regex => {
+			this.#result = this.#result.replace(regex.pattern, regex.replace)
+		})
 
 		this._element.value = this.#result
 
 		this.#setCaretPosition(this.#caretPosition)
-	}
-
-	#applyRules (array) {
-		array.forEach((regex) => {
-			this.#result = this.#result.replace(regex.pattern, regex.replace)
-		})
 	}
 
 	#getCaretPosition () {
@@ -340,11 +341,11 @@ export default class FlyTypograf {
 			let _range = document.getSelection().getRangeAt(0)
 			let range = _range.cloneRange()
 			range.selectNodeContents(this._element)
-			range.setEnd(_rang.endContainer, _range.endOffset)
+			range.setEnd(_range.endContainer, _range.endOffset)
 			return range.toString().length
 		}
 
-		this.#caretPosition = this._element.selectionStart
+		return this._element.selectionStart
 	}
 
 	#setCaretPosition (pos) {
