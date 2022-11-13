@@ -1,4 +1,4 @@
-import FlyTypograf from './fly-typograf.js';
+import FlyTypograf from './fly-typograf.js'
 
 // Usage FlyTypograf
 const textarea = document.querySelector(`#typograf`)
@@ -21,14 +21,14 @@ const printHighLighted = () => {
 		<p>
 			${textarea.value
 				.replace(/\bon[a-z]+="?[^">]+"?/gi, ``)
-				.replace(/="?javascript:/gi, `="#`)
+				.replace(/="?(?:javascript|void):/gi, `="#`)
 				.replace(/(<\/?[a-z]+[^>]*?>)/gi, (str, $1) => {
 					tags.push($1)
 					return `<*>`
 				})
 				.replace(/\n{2,}/g, "</p><p>")
 				.replace(/\n/g, "<br />")
-				.replace(/\u00a0/g, `<span class="hlg">&nbsp\;</span>`)
+				.replace(/\u00a0/g, `<span class="hlg">&nbsp;</span>`)
 				.replace(/([…©®™₽×—–−„“«»″′’½⅓¼⅕⅙⅛⅔⅖¾⅗⅜⅘⅚⅝⅞±÷⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺⁼⁽⁾°]+)/gi, `<span class="hlb">$1</span>`)
 				.replaceAll('<*>', () => {
 					const str = tags[0]
