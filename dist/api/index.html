@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru-RU">
+	<head>
+		<meta charset="utf-8">
+		<title>fly-typograf.js — API</title>
+		<meta name="copyright" content="2023, © Evgeniy Lepeshkin">
+		<link href="../common.css" rel="stylesheet">
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+		<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+	</head>
+	<body>
+		<main>
+			<nav>
+				<li><a href="../index.html">Как работает?</a></li>
+				<li><b>Примеры</b></li>
+				<li><a href="../input-auto/index.html">Автотипографика</a></li>
+				<li><a href="../input-click/index.html">По клику</a></li>
+				<li><a href="../ckEditor/index.html">Для ckEditor</a></li>
+				<li>API</li>
+				<li class="spacer"></li>
+				<li>на <a href="https://github.com/Spearance/fly-typograf.js">GitHub</a></p></li>
+			</nav>
+			<section>
+				<article>
+					<h1>API</h1>
+					<h2>Установка</h2>
+					<div class="listing">
+						<pre><code class="language-bash">npm install fly-typograf</code></pre>
+					</div>
+
+					<h2>Класс FlyTypograf</h2>
+					<div class="listing">
+						<h3>Создание экземпляра класса</h3>
+						<pre><code class="language-js">const typograf = new FlyTypograf(formElement, preference);</code></pre>
+					</div>
+
+					<blockquote>
+						<p><code><b>formElement</b></code> {element} — элемент формы <code>&lt;input&gt;</code> или <code>&lt;textarea&gt;</code> внутри которого будет обрабатываться текст (обязательный).</p>
+						<p><code><b>preference</b></code> {object} — объект с настройками типографа (необязательный):</p>
+						<blockquote>
+							<p><code><b>leftOutQuote</b></code> {string}&nbsp;— левая внешняя кавычка, по&nbsp;умолчанию левая «ёлка» <code>«</code></p>
+							<p><code><b>rightOutQuote</b></code> {string}&nbsp;— правая внешняя кавычка, по&nbsp;умолчанию правая «ёлка» <code>»</code></p>
+							<p><code><b>isMoveCaret</b></code> {boolean}&nbsp;— перемещать позицию курсора при типографировании, по&nbsp;умолчанию <code>true</code></p>
+						</blockquote>
+					</blockquote>
+
+					<div class="listing">
+						<h3>Пример изменяющий форму кавычек на кавычки „лапки“</h3>
+						<pre><code class="language-js">const typograf = new FlyTypograf(document.querySelector('input'), {
+	leftOutQuote: '„',
+	rightOutQuote: '“'
+});</code></pre>
+					</div>
+
+					<h2>Геттеры</h2>
+					<p><code><b>source</b></code> — возвращает исходный текст</p>
+					<p><code><b>result</b></code> — возвращает типографированный текст</p>
+
+					<div class="listing">
+						<h3>Вывод результата в консоль</h3>
+						<pre><code class="language-js">const typograf = new FlyTypograf(document.querySelector('input'));
+
+Typograf.process();
+
+console.log(Typograf.result)
+						</code></pre>
+					</div>
+
+				</article>
+			</section>
+		</main>
+		<script>hljs.highlightAll();</script>
+	</body>
+</html>

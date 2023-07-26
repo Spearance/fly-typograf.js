@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru-RU">
+	<head>
+		<meta charset="utf-8">
+		<title>fly-typograf.js — настройка для ckEditor</title>
+		<meta name="copyright" content="2023, © Evgeniy Lepeshkin">
+		<link href="../common.css" rel="stylesheet">
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+		<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+	</head>
+	<body>
+		<main>
+			<nav>
+				<li><a href="../index.html">Как работает?</a></li>
+				<li><b>Примеры</b></li>
+				<li><a href="../input-auto/index.html">Автотипографика</a></li>
+				<li><a href="../input-click/index.html">По клику</a></li>
+				<li>Для ckEditor</li>
+				<li><a href="../api/index.html">API</a></li>
+				<li class="spacer"></li>
+				<li>на <a href="https://github.com/Spearance/fly-typograf.js">GitHub</a></p></li>
+			</nav>
+			<section>
+				<article>
+					<h1>Настройка для ckEditor</h1>
+
+					<textarea autocomplete="off" id="editor">Поставь дефис перед этой строкой.</textarea>
+				</article>
+			</section>
+		</main>
+		<script src="https://cdn.ckeditor.com/ckeditor5/38.1.0/classic/ckeditor.js"></script>
+
+		<script id="listing-1" type="module">import { FlyTypograf } from '../fly-typograf.js';
+
+			function debounce (callee, timeoutMs) {
+				return function perform(...args) {
+					let previousCall = this.lastCall
+
+					this.lastCall = Date.now()
+
+					if (previousCall && this.lastCall - previousCall <= timeoutMs) {
+						clearTimeout(this.lastCallTimer)
+					}
+
+					this.lastCallTimer = setTimeout(() => callee(...args), timeoutMs)
+				}
+			}
+
+			const ckEditorElement = document.querySelector('#editor');
+			const Typograf = new FlyTypograf(ckEditorElement, {isMoveCaret: false});
+
+			const initEditor = (ckEditorElement) => ClassicEditor.create(ckEditorElement, {
+        		toolbar: [ 'undo', 'redo', 'bold', 'italic', 'numberedList', 'bulletedList' ]
+    		}).then( ckEditor => {
+				ckEditor.model.document.on('change:data', debounce(() => {
+					// get caret position
+
+					/*ckEditor.updateSourceElement()
+					Typograf.process()
+					ckEditor.setData(ckEditorElement.value)*/
+					// set caret position
+				}, 100))
+			});
+
+			initEditor(ckEditorElement)
+		</script>
+
+	</body>
+</html>

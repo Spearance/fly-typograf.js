@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru-RU">
+	<head>
+		<meta charset="utf-8">
+		<title>fly-typograf.js — по клику</title>
+		<meta name="copyright" content="2023, © Evgeniy Lepeshkin">
+		<link href="../common.css" rel="stylesheet">
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+		<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+	</head>
+	<body>
+		<main>
+			<nav>
+				<li><a href="../index.html">Как работает?</a></li>
+				<li><b>Примеры</b></li>
+				<li><a href="../input-auto/index.html">Автотипографика</a></li>
+				<li>По клику</li>
+				<li><a href="../ckEditor/index.html">Для ckEditor</a></li>
+				<li><a href="../api/index.html">API</a></li>
+				<li class="spacer"></li>
+				<li>на <a href="https://github.com/Spearance/fly-typograf.js">GitHub</a></p></li>
+			</nav>
+			<section>
+				<article>
+					<h1>Типографика по клику</h1>
+
+					<form autocomplete="off">
+						<label>
+							<p>Поле типографируется по клику на кнопку</p>
+							<input type="text" class="typograf-input" autofocus>
+							<button type="button" class="typograf">«/»</button>
+						</label>
+						<div class="listing">
+							<h3>HTML</h3>
+							<pre><code class="language-html">&lt;label&gt;
+	&lt;input type="text" class="typograf-input"&gt;
+	&lt;button type="button" class="typograf"&gt;«/»&lt;/button&gt;
+&lt;/label&gt;</code></pre>
+						</div>
+						<div class="listing">
+							<h3>JavaScript</h3>
+							<pre><code class="listing-1 language-js"></code></pre>
+						</div>
+					</form>
+				</article>
+			</section>
+		</main>
+
+<script id="listing-1" type="module">import { FlyTypograf } from '../fly-typograf.js';
+
+const button = document.querySelector('.typograf');
+const inputField = document.querySelector('.typograf-input');
+
+if (inputField && button) {
+	const Typograf = new FlyTypograf(inputField, { isMoveCaret: false });
+
+	button.addEventListener('click', () => Typograf.process());
+}
+</script>
+
+<script>
+	const listing = document.querySelector('#listing-1')
+	const codeListing = document.querySelector('.listing-1')
+	codeListing.textContent = listing.innerHTML.replace('../', '')
+</script>
+<script>hljs.highlightAll();</script>
+	</body>
+</html>

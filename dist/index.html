@@ -1,59 +1,62 @@
 <!DOCTYPE html>
 <html lang="ru-RU">
 	<head>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<meta charset="utf-8">
 		<title>fly-typograf.js</title>
-		<meta name="copyright" content="2021, © Evgeniy Lepeshkin">
-		<style>
-			html, body {
-				background-color: #F5F5F5;
-				font-family: 'Times New Roman', serif;
-				font-size: 110%;
-			}
-
-			main {
-				min-width: 300px;
-				max-width: 1200px;
-				margin: 0 auto;
-			}
-
-			textarea {
-				font-family: 'Times New Roman', sans-serif;
-				border: none;
-				box-shadow: 0 0 50px 0 rgba(70, 70, 70, 0.5);
-				margin: 50px, 0;
-				width: 100%;
-				height: 300px;
-				resize: none;
-				outline: none;
-				font-size: 100%;
-				padding: 20px;
-			}
-
-			.hlg{ background-color: #B8FBBA }
-			.hlb{ background-color: #B7ECF1 }
-		</style>
-
+		<meta name="copyright" content="2023, © Evgeniy Lepeshkin">
+		<link href="./common.css" rel="stylesheet">
 	</head>
 	<body>
 		<main>
-			<h1>fly-typograf.js</h1>
-			<small>версия: 1.2.7</small>
+			<nav>
+				<li>Как работает?</li>
+				<li><b>Примеры</b></li>
+				<li><a href="./input-auto/index.html">Автотипографика</a></li>
+				<li><a href="./input-click/index.html">По клику</a></li>
+				<li><a href="./ckEditor/index.html">Для ckEditor</a></li>
+				<li><a href="./api/index.html">API</a></li>
+				<li class="spacer"></li>
+				<li>на <a href="https://github.com/Spearance/fly-typograf.js">GitHub</a></p></li>
+			</nav>
+			<section>
+				<article>
+					<h1>fly-typograf.js</h1>
+					<small>версия: 1.2.7</small>
 
-			<p>Наберите текст:</p>
+					<p>Наберите этот текст:</p>
 <pre id="example">- Кое-как добились погрешности в пределах 1/2-1/4. А дело-то простое, как "2+2=4"! - Помню, в 2017-м году такое уже делали.
 Ходил вчера в аптеку, а там табличка: "Перерыв 13:00-14:00 ч."! Зашел в Starbucks(TM), выпил кофе за 299,99(Р).
 В телефоне полазил, скоротал минут 30-40. Смотрю на часы - 13:55. Ну, думаю, пора!</pre>
-			<p>Или нажмите: <button id="type">напечатать</button></p>
+					<p>Или нажмите: <button id="type">напечатать</button></p>
 
-			<textarea placeholder="начните писать..." autocomplete="off" id="typograf" autofocus=""></textarea>
+					<textarea placeholder="начните писать..." autocomplete="off" id="typograf" autofocus=""></textarea>
 
-			<h3>Подсветка изменений</h3>
-			<p id="highLight">начните писать...</p>
+					<h3>Подсветка изменений</h3>
+					<p id="highLight">начните писать...</p>
 
-			<p>Ссылка на репозиторий на <a href="https://github.com/Spearance/fly-typograf.js">GitHub</a></p>
+					<h2>Что делает Типограф?</h2>
+					<p>Верстает текст по&nbsp;правилам типографской (экранной) верстки внутри полей <code>&lt;input&gt;</code> и&nbsp;<code>&lt;textarea&gt;</code> автоматически при наборе с&nbsp;клавиатуры.</p>
+					<p>Умеет:</p>
+					<ul>
+						<li>Заменять кавычки, тире, спецсимволы: …, ©, ®, ™, ₽, ±, ÷</li>
+						<li>Ставить простые дроби: ½, ⅓, ¼, ⅕, ⅙, ⅐, ⅛, ⅑, ⅒, ⅔, ⅖, ¾, ⅗, ⅜, ⅘, ⅚, ⅝, ⅞</li>
+						<li>Умеет ставить минус между числами и × между размерными единицами</li>
+						<li>Привязывать неразрывным пробелом союзы и&nbsp;предлоги к&nbsp;последующим словам, а&nbsp;частицы к&nbsp;предыдущим</li>
+						<li>Ставить степени, градусы, дюймы</li>
+						<li>Разрешает писать <abbr title="HyperText Markup Language">HTML</abbr> и&nbsp;комментарии к&nbsp;нему</li>
+					</ul>
+
+					<h2>Кому подойдет?</h2>
+
+					<p>Разработчикам любых <abbr title="Customer Relationship Management">CRM</abbr> и&nbsp;<abbr title="Content Management System">CMS</abbr> систем, маленьким сайтам и&nbsp;большим проектам.</p>
+					<p>Везде где нужно писать статьи, новости, брифы, <nobr>пресс-релизы</nobr> и&nbsp;просто заголовки. Где нужно уделить время не&nbsp;только тексту, но&nbsp;и&nbsp;стилю.</p>
+
+					<h2>Куда писать?</h2>
+					<p>О проблемах/пожеланиях в&nbsp;работе скрипта можно писать в&nbsp;«<a href="https://github.com/Spearance/fly-typograf.js/issues">issues</a>» на GitHub или на&nbsp;электронную почту <a href="mailto:mail@typograf.ru">mail@typograf.ru</a></p>
+				</article>
+			</section>
 		</main>
 
-		<script src="typograf.min.js"></script>
+		<script src="example.js" type="module"></script>
 	</body>
 </html>
