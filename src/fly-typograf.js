@@ -1,19 +1,21 @@
 /*
 	https://github.com/Spearance/fly-typograf.js
 
-	Copyright 2021, Evgeniy Lepeshkin
+	Copyright 2023, Evgeniy Lepeshkin
 
 	Released under the MIT license.
 	http://www.opensource.org/licenses/mit-license.php
 
 	Version: v 1.2.7
-	Date: Nov 13, 2022
+	Date: Jul 26, 2023
  */
 
-export default class FlyTypograf {
+export class FlyTypograf {
 	#result = ``
+	#source = ``
 	#caretPosition = 0
 
+	#isMoveCaret = true;
 	#leftOutQuote = `«`
 	#rightOutQuote = `»`
 
@@ -305,15 +307,19 @@ export default class FlyTypograf {
 	constructor (textElement, preference) {
 		this._element = textElement
 		this._isContentEditable = this._element.contentEditable === true
+		this.#source = this._element.value
 
-		if (preference) {
-			this.#leftOutQuote = preference.leftOutQuote || `«`
-			this.#rightOutQuote = preference.rightOutQuote || `»`
-		}
+		this.#isMoveCaret = preference?.isMoveCaret
+		this.#leftOutQuote = preference?.leftOutQuote
+		this.#rightOutQuote = preference?.rightOutQuote
 	}
 
 	get result () {
 		return this.#result
+	}
+
+	get source () {
+		return this.#source
 	}
 
 	process () {
@@ -324,7 +330,9 @@ export default class FlyTypograf {
 	}
 
 	#applyRules (array) {
-		this.#caretPosition = this.#getCaretPosition()
+		if (this.#isMoveCaret) {
+			this.#caretPosition = this.#getCaretPosition()
+		}
 
 		array.forEach(regex => {
 			this.#result = this.#result.replace(regex.pattern, regex.replace)
@@ -332,7 +340,9 @@ export default class FlyTypograf {
 
 		this._element.value = this.#result
 
-		this.#setCaretPosition(this.#caretPosition)
+		if (this.#isMoveCaret) {
+			this.#setCaretPosition(this.#caretPosition)
+		}
 	}
 
 	#getCaretPosition () {
