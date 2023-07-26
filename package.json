@@ -26,11 +26,13 @@
   },
   "homepage": "https://github.com/Spearance/fly-typograf.js#readme",
   "scripts": {
+		"start": "browser-sync start --server 'dist' --no-ui --files \"js/**/*.js\"",
     "build": "webpack --mode production",
     "eslint": "eslint src/",
     "test": "npm run eslint"
   },
   "devDependencies": {
+		"browser-sync": "^2.29.3",
     "@babel/cli": "^7.19",
     "@babel/core": "^7.19",
     "@babel/eslint-parser": "^7.19",
