@@ -1,10 +1,10 @@
 module.exports = {
   entry: {
-		filename: '/src/example.js'
+		filename: '/src/fly-typograf.js'
 	},
   output: {
 		path: __dirname + '/dist',
-    filename: 'typograf.min.js',
-		iife: true
+    filename: 'fly-typograf.min.js',
+		libraryTarget: 'umd'
   }
 };
